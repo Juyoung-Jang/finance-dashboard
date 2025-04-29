@@ -1,39 +1,102 @@
-.stock-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-  
-  .stock-form input, .stock-form button {
-    padding: 8px;
-    font-size: 1rem;
-  }
-  
-  .stock-form .error {
-    color: red;
-    font-size: 0.9rem;
-  }
+/* Global reset */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+}
 
-  .stock-list {
-    margin: 30px auto;
-    width: 90%;
-    max-width: 800px;
-  }
-  
-  .stock-list table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .stock-list th, .stock-list td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: center;
-  }
-  
-  .stock-list th {
-    background-color: #f4f4f4;
-  }
-  
+/* Center the app */
+.App {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+.App h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+/* Form Styling */
+.stock-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.stock-form input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.stock-form button {
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.stock-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Error message */
+.stock-form .error, .error {
+  color: red;
+  font-size: 0.9rem;
+}
+
+/* Table Styling */
+.stock-list {
+  overflow-x: auto;
+}
+
+.stock-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.stock-list th, .stock-list td {
+  padding: 14px 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.stock-list th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+}
+
+.stock-list td {
+  font-size: 0.95rem;
+}
+
+/* Profit/Loss cell */
+.stock-list td:nth-child(5) {
+  font-weight: bold;
+}
+
+/* No stocks message */
+.stock-list p {
+  text-align: center;
+  margin-top: 20px;
+  font-style: italic;
+  color: #666;
+}
