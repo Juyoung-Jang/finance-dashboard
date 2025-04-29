@@ -1,32 +1,39 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StockContext } from '../context/StockContext';
 import useFetchStock from '../hooks/useFetchStock';
 
 const StockList = () => {
   const { stocks, setStocks } = useContext(StockContext);
   const { fetchStock } = useFetchStock();
+  const [loadingPrices, setLoadingPrices] = useState(false);
 
   useEffect(() => {
     const updatePrices = async () => {
       const apiKey = '1A450JWQE2QQX4MI';
+      setLoadingPrices(true);
 
       const updatedStocks = await Promise.all(
         stocks.map(async (stock) => {
           const newPrice = await fetchStock(stock.symbol, apiKey);
           return {
             ...stock,
-            currentPrice: newPrice ?? stock.currentPrice, // fallback to old price if API fails
+            currentPrice: newPrice ?? stock.currentPrice,
           };
         })
       );
 
       setStocks(updatedStocks);
+      setLoadingPrices(false);
     };
 
     if (stocks.length > 0) {
       updatePrices();
     }
-  }, [stocks.length]); // re-run only when number of stocks changes
+  }, [stocks.length]);
+
+  if (loadingPrices) {
+    return <div className="spinner"></div>;
+  }
 
   if (stocks.length === 0) {
     return <p style={{ textAlign: 'center', marginTop: '20px' }}>No stocks available.</p>;
