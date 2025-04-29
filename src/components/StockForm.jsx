@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { StockContext } from '../context/StockContext.jsx';
+import useFetchStock from '../hooks/useFetchStock';
 
 const StockForm = () => {
   const { stocks, setStocks } = useContext(StockContext);
@@ -7,29 +8,25 @@ const StockForm = () => {
   const [symbol, setSymbol] = useState('');
   const [quantity, setQuantity] = useState('');
   const [purchasePrice, setPurchasePrice] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
+  const { fetchStock, loading, error } = useFetchStock();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setLocalError('');
 
     if (!symbol || !quantity || !purchasePrice) {
-      setError('Please fill in all fields.');
+      setLocalError('Please fill in all fields.');
       return;
     }
 
     try {
-      const apiKey = '1A450JWQE2QQX4MI'; // 🔥 Replace with your real AlphaVantage API key
-      const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`);
-      const data = await response.json();
+      const apiKey = '1A450JWQE2QQX4MI';
+      const currentPrice = await fetchStock(symbol, apiKey);
 
-      // Check if the symbol is valid
-      if (!data["Global Quote"] || !data["Global Quote"]["05. price"]) {
-        setError('Invalid stock symbol.');
+      if (currentPrice === null) {
         return;
       }
-
-      const currentPrice = parseFloat(data["Global Quote"]["05. price"]);
 
       const newStock = {
         symbol: symbol.toUpperCase(),
@@ -75,6 +72,7 @@ const StockForm = () => {
 
       <button type="submit">Add Stock</button>
 
+      {localError && <p className="error">{localError}</p>}
       {error && <p className="error">{error}</p>}
     </form>
   );

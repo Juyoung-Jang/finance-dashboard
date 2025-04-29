@@ -1,8 +1,32 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { StockContext } from '../context/StockContext';
+import useFetchStock from '../hooks/useFetchStock';
 
 const StockList = () => {
-  const { stocks } = useContext(StockContext);
+  const { stocks, setStocks } = useContext(StockContext);
+  const { fetchStock } = useFetchStock();
+
+  useEffect(() => {
+    const updatePrices = async () => {
+      const apiKey = '1A450JWQE2QQX4MI';
+
+      const updatedStocks = await Promise.all(
+        stocks.map(async (stock) => {
+          const newPrice = await fetchStock(stock.symbol, apiKey);
+          return {
+            ...stock,
+            currentPrice: newPrice ?? stock.currentPrice, // fallback to old price if API fails
+          };
+        })
+      );
+
+      setStocks(updatedStocks);
+    };
+
+    if (stocks.length > 0) {
+      updatePrices();
+    }
+  }, [stocks.length]); // re-run only when number of stocks changes
 
   if (stocks.length === 0) {
     return <p style={{ textAlign: 'center', marginTop: '20px' }}>No stocks available.</p>;
